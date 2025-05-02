@@ -1,0 +1,45 @@
+.header {
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(90deg, #1976d2, #2196f3);
+}
+
+.header .MuiToolbar-root {
+  padding: 0.5rem 0;
+}
+
+/* Logo animation on hover */
+.header a:first-child {
+  transition: transform 0.3s ease;
+}
+
+.header a:first-child:hover {
+  transform: scale(1.05);
+}
+
+/* Custom styling for menu items */
+.MuiMenu-paper {
+  margin-top: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge animation */
+.MuiBadge-badge {
+  transition: transform 0.2s ease;
+}
+
+.MuiBadge-badge:hover {
+  transform: scale(1.2);
+}
+
+/* Mobile drawer styling */
+.MuiDrawer-paper {
+  padding-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .header .MuiToolbar-root {
+    padding: 0.5rem 1rem;
+  }
+}

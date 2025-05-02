@@ -1,0 +1,40 @@
+.dashboard-page {
+  padding-top: 24px;
+  padding-bottom: 48px;
+  min-height: 60vh;
+}
+
+.dashboard-card {
+  height: 100%;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-icon {
+  font-size: 36px;
+  margin-right: 12px;
+}
+
+.dashboard-stat {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.dashboard-stat-label {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .dashboard-page {
+    padding-top: 16px;
+  }
+  
+  .dashboard-stat {
+    font-size: 20px;
+  }
+}

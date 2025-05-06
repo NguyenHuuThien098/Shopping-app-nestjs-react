@@ -8,7 +8,7 @@ const defaultAuthState: AuthState = {
   isAuthenticated: false,
   user: null,
   token: null,
-  loading: true,
+  // loading: true,
   error: null,
 };
 
@@ -17,7 +17,7 @@ const AuthContext = createContext<{
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  loading: boolean;
+  // loading: boolean;
   error: string | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (userData: RegisterCredentials) => Promise<void>;
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               isAuthenticated: true,
               user: profileResponse.user,
               token: currentToken,
-              loading: false,
+              // loading: false,
               error: null,
             });
           } else {
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               isAuthenticated: false,
               user: null,
               token: null,
-              loading: false,
+              // loading: false,
               error: null,
             });
             setAuthToken(null);
@@ -82,7 +82,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             isAuthenticated: false,
             user: null,
             token: null,
-            loading: false,
+            // loading: false,
             error: null,
           });
         }
@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           isAuthenticated: false,
           user: null,
           token: null,
-          loading: false,
+          // loading: false,
           error: null,
         });
         setAuthToken(null);
@@ -119,7 +119,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        loading: false,
+        // loading: false,
         error: null,
       });
     };
@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: true,
         user: response.user,
         token: response.access_token,
-        loading: false,
+        // loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -169,7 +169,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: true,
         user: response.user,
         token: response.access_token,
-        loading: false,
+        // loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -194,7 +194,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        loading: false,
+        // loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -204,7 +204,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        loading: false,
+        // loading: false,
         error: null,
       });
     }
@@ -216,7 +216,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: authState.isAuthenticated,
         user: authState.user,
         token: authState.token,
-        loading: authState.loading,
+        // loading: authState.loading,
         error: authState.error,
         login,
         register,

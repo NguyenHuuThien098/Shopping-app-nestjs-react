@@ -13,16 +13,16 @@ interface PrivateRouteProps {
  * Redirects to login if user is not authenticated
  */
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
-  const { isAuthenticated, loading, user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   
   // If authentication is still loading, show a loading spinner
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+  //       <CircularProgress />
+  //     </Box>
+  //   );
+  // }
 
   // Check if user is authenticated
   if (!isAuthenticated) {

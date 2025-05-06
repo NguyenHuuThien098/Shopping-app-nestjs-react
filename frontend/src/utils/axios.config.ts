@@ -103,8 +103,6 @@ axiosInstance.interceptors.response.use(
         const logoutEvent = new CustomEvent('auth-logout');
         window.dispatchEvent(logoutEvent);
         
-        // Chuyển hướng người dùng đến trang đăng nhập
-        window.location.href = '/login';
       }
     }
     

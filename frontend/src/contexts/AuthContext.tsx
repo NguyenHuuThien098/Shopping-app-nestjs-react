@@ -8,7 +8,7 @@ const defaultAuthState: AuthState = {
   isAuthenticated: false,
   user: null,
   token: null,
-  // loading: true,
+  loading: true,
   error: null,
 };
 
@@ -17,7 +17,7 @@ const AuthContext = createContext<{
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  // loading: boolean;
+  loading: boolean;
   error: string | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (userData: RegisterCredentials) => Promise<void>;
@@ -44,56 +44,60 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Check if we have a token in memory
-        const currentToken = getAuthToken();
-        
-        if (currentToken) {
-          console.log("Found existing token, verifying...");
-          
-          // Try to get user profile to check if token is still valid
-          const profileResponse = await apiGetProfile();
-          
-          if (profileResponse && profileResponse.user) {
-            console.log("Token valid, user authenticated");
-            // Valid token and user profile
-            setAuthState({
-              isAuthenticated: true,
-              user: profileResponse.user,
-              token: currentToken,
-              // loading: false,
-              error: null,
-            });
-          } else {
-            // Token exists but is invalid
-            console.log("Token exists but is invalid");
+        const currentToken = getAuthToken();    
+        if (currentToken) {          
+          try {
+            const profileResponse = await apiGetProfile();
+            console.log("Profile response:", profileResponse);
+            
+            if (profileResponse && profileResponse.id) {
+              console.log("Token valid, user authenticated");
+              setAuthState({
+                isAuthenticated: true,
+                user: profileResponse,
+                token: currentToken,
+                loading: false, // Cập nhật trạng thái loading
+                error: null,
+              });
+            } else {
+              console.log("Token exists but no valid user data returned");
+              setAuthState({
+                isAuthenticated: false,
+                user: null,
+                token: null,
+                loading: false, // Cập nhật trạng thái loading
+                error: null,
+              });
+              setAuthToken(null);
+            }
+          } catch (error) {
+            console.error("Error fetching profile:", error);
             setAuthState({
               isAuthenticated: false,
               user: null,
               token: null,
-              // loading: false,
+              loading: false, // Cập nhật trạng thái loading
               error: null,
             });
             setAuthToken(null);
           }
         } else {
-          // No token at all
           console.log("No token found, user is not authenticated");
           setAuthState({
             isAuthenticated: false,
             user: null,
             token: null,
-            // loading: false,
+            loading: false, // Cập nhật trạng thái loading
             error: null,
           });
         }
       } catch (error) {
-        // Authentication check failed
-        console.log('Auth check failed:', error);
+        console.error("Auth check failed:", error);
         setAuthState({
           isAuthenticated: false,
           user: null,
           token: null,
-          // loading: false,
+          loading: false, // Cập nhật trạng thái loading
           error: null,
         });
         setAuthToken(null);
@@ -119,7 +123,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        // loading: false,
+        loading: false,
         error: null,
       });
     };
@@ -136,7 +140,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Login function
   const login = async (credentials: LoginCredentials) => {
     try {
-      setAuthState((prev) => ({ ...prev, loading: true, error: null }));
+      setAuthState((prev) => ({ ...prev,loading: true , error: null }));
       
       const response = await apiLogin(credentials);
       
@@ -144,7 +148,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: true,
         user: response.user,
         token: response.access_token,
-        // loading: false,
+        loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -169,7 +173,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: true,
         user: response.user,
         token: response.access_token,
-        // loading: false,
+        loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -194,7 +198,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        // loading: false,
+        loading: false,
         error: null,
       });
     } catch (error: any) {
@@ -204,7 +208,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: false,
         user: null,
         token: null,
-        // loading: false,
+        loading: false,
         error: null,
       });
     }
@@ -216,7 +220,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: authState.isAuthenticated,
         user: authState.user,
         token: authState.token,
-        // loading: authState.loading,
+        loading: authState.loading,
         error: authState.error,
         login,
         register,

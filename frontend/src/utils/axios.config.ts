@@ -18,11 +18,24 @@ let inMemoryToken: string | null = null;
 // Function to set the token from outside (typically from AuthContext)
 export const setAuthToken = (token: string | null) => {
   inMemoryToken = token;
+  //lưu token vào localStorage
+  if (token) {
+    localStorage.setItem('auth_token', token);
+  } else {
+    localStorage.removeItem('auth_token');
+  }
   console.log('Auth token updated in axios instance');
 };
 
 // Function to get the current token
 export const getAuthToken = () => {
+  if (!inMemoryToken) {
+    const storedToken = localStorage.getItem('auth_token');
+    //lấy token từ localStorage
+    if (storedToken) {
+      inMemoryToken = storedToken;
+    }
+  }
   return inMemoryToken;
 };
 
@@ -33,7 +46,7 @@ axiosInstance.interceptors.request.use(
     if (inMemoryToken) {
       config.headers.Authorization = `Bearer ${inMemoryToken}`;
     }
-    
+
     return config;
   },
   (error) => {
@@ -48,14 +61,14 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    
+
     // Nếu là lỗi 401 (Unauthorized) và chưa thử refresh token
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
+
       try {
         console.log("Đang thử làm mới token sau lỗi 401...");
-        
+
         // Gọi API refresh token
         const response = await axios.post(
           `${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`,
@@ -68,20 +81,20 @@ axiosInstance.interceptors.response.use(
             }
           }
         );
-        
+
         if (response.data.success && response.data.data?.token) {
           const newToken = response.data.data.token;
           console.log("Token đã được làm mới thành công!");
-          
+
           // Update the in-memory token
           setAuthToken(newToken);
-          
+
           // Trigger an auth state update event
-          const tokenRefreshEvent = new CustomEvent('token-refreshed', { 
+          const tokenRefreshEvent = new CustomEvent('token-refreshed', {
             detail: { token: newToken }
           });
           window.dispatchEvent(tokenRefreshEvent);
-          
+
           // Cập nhật token trong header và thử lại request ban đầu
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return axios(originalRequest);
@@ -90,22 +103,22 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('Không thể làm mới token:', refreshError);
-        
+
         // Xem phản hồi từ server nếu có
         if (axios.isAxiosError(refreshError) && refreshError.response) {
           console.error('Chi tiết lỗi từ server:', refreshError.response.data);
         }
-        
+
         // Clear the in-memory token
         setAuthToken(null);
-        
+
         // Trigger an auth state update event for logout
         const logoutEvent = new CustomEvent('auth-logout');
         window.dispatchEvent(logoutEvent);
-        
+
       }
     }
-    
+
     return Promise.reject(error);
   }
 );

@@ -107,11 +107,7 @@ export const getUserProfile = async () => {
     const response = await axios.get(API_ENDPOINTS.AUTH.PROFILE);
     return response.data;
   } catch (error: any) {
-    // Don't throw error if it's just an unauthorized error (not logged in)
-    if (error.response?.status === 401) {
-      return { user: null };
-    }
-    
+    console.error('Profile API error:', error.response?.data || error.message);
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }

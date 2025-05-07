@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+// import CircularProgress from '@mui/material/CircularProgress';
+// import Box from '@mui/material/Box';
 
 /**
  * PublicRoute component that redirects authenticated users to dashboard
@@ -22,7 +22,7 @@ const PublicRoute: React.FC = () => {
 
   // If user is authenticated, redirect to dashboard
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   // If not authenticated, render the public content

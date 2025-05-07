@@ -12,7 +12,7 @@ export interface Product {
   imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
-  // Add these properties to align with components
+  // them cac truong ho tro cho componet
   name?: string;
   unitPrice?: number;
 }
@@ -42,8 +42,21 @@ export const searchProducts = async (
         limit,
       },
     });
-    return response.data;
+
+    console.log('Kết quả tim kiếm: ', response.data);
+
+    const normalizedData = response.data.data?.map((product: Product) => ({
+      ...product,
+      name: product.Name || product.name,
+      unitPrice: product.UnitPrice || product.unitPrice
+    }));
+
+    return {
+      data: normalizedData || [],
+      total: response.data.total || 0
+    };
   } catch (error: any) {
+    console.error('Lỗi tìm kiếm sản phẩm:', error.response?.data || error.message);
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
@@ -58,26 +71,28 @@ export const searchProducts = async (
  * @param limit Items per page
  * @returns Promise with search results
  */
-export const searchPublicProducts = async (
+export const getProducts = async (
   query: string,
   page: number = 1,
   limit: number = 10
 ): Promise<SearchResponse> => {
   try {
-    // Use the parameter names that the API actually expects
-    const response = await axios.get(API_ENDPOINTS.PRODUCTS.PUBLIC_SEARCH, {
+    console.log(`Lấy danh sách sản phẩm, page=${page}, limit=${limit}`);
+    
+    const response = await axios.get(API_ENDPOINTS.PRODUCTS.ROOT, {
       params: {
-        q: query, // Changed from 'nameProduct' to 'q'
         page,
-        limit, // Changed from 'pageSize' to 'limit'
+        limit,
       },
     });
     
-    // Normalize data to include name and unitPrice fields for compatibility
+    console.log('Kết quả danh sách sản phẩm:', response.data);
+    
+    // Chuẩn hóa dữ liệu để hỗ trợ cả hai kiểu đặt tên
     const normalizedData = response.data.data?.map((product: Product) => ({
       ...product,
-      name: product.Name, // Add name field
-      unitPrice: product.UnitPrice // Add unitPrice field
+      name: product.Name || product.name,
+      unitPrice: product.UnitPrice || product.unitPrice
     }));
     
     return {
@@ -85,6 +100,7 @@ export const searchPublicProducts = async (
       total: response.data.total || 0
     };
   } catch (error: any) {
+    console.error('Lỗi lấy danh sách sản phẩm:', error.response?.data || error.message);
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
@@ -99,16 +115,20 @@ export const searchPublicProducts = async (
  */
 export const getProductById = async (id: number): Promise<Product> => {
   try {
-    const response = await axios.get(API_ENDPOINTS.PRODUCTS.DETAILS.replace(':id', id.toString()));
+    console.log(`Lấy chi tiết sản phẩm ID=${id}`);
     
-    // Normalize response to include both naming conventions
+    const response = await axios.get(API_ENDPOINTS.PRODUCTS.DETAILS.replace(':id', id.toString()));
+    console.log('Chi tiết sản phẩm:', response.data);
+    
+    // Chuẩn hóa phản hồi để hỗ trợ cả hai kiểu đặt tên
     const product = response.data;
     return {
       ...product,
-      name: product.Name,
-      unitPrice: product.UnitPrice
+      name: product.Name || product.name,
+      unitPrice: product.UnitPrice || product.unitPrice
     };
   } catch (error: any) {
+    console.error('Lỗi lấy chi tiết sản phẩm:', error.response?.data || error.message);
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
@@ -131,14 +151,14 @@ export const fetchProducts = async (
         limit: pageSize, // Changed from 'pageSize' to 'limit'
       },
     });
-    
+
     // Normalize data to include name and unitPrice fields for compatibility
     const normalizedData = response.data.data?.map((product: Product) => ({
       ...product,
       name: product.Name, // Add name field
       unitPrice: product.UnitPrice // Add unitPrice field
     }));
-    
+
     return {
       data: normalizedData || [],
       total: response.data.total || 0

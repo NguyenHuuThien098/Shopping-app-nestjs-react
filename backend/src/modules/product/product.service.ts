@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../../entities/product.entity';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -29,11 +30,10 @@ export class ProductService {
 
   async search(query: string, page: number, limit: number): Promise<{ data: Product[]; total: number }> {
     const [data, total] = await this.productRepository.findAndCount({
-      where: { Name: `%${query}%` }, // Tìm kiếm theo tên sản phẩm
+      where: { Name: Like(`%${query}%`) }, // Tìm kiếm theo tên sản phẩm
       skip: (page - 1) * limit,
       take: limit,
     });
-
     return { data, total };
   }
 }

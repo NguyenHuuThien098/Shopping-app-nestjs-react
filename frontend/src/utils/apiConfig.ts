@@ -17,7 +17,6 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     ROOT: '/products',
     SEARCH: '/products/search',
-    PUBLIC_SEARCH: '/products', // Changed from '/products/public/search' to '/products'
     DETAILS: '/products/:id',
   },
   ORDERS: '/orders',

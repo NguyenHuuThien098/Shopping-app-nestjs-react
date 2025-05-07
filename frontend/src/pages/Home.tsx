@@ -43,14 +43,14 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link, useNavigate } from 'react-router-dom';
-import { getApiUrl, API_ENDPOINTS } from '../utils/apiConfig';
-import axios from 'axios';
+// import { getApiUrl, API_ENDPOINTS } from '../utils/apiConfig';
+// import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import './styles/Home.css';
 
 // Update the import to use our new service
-import { searchPublicProducts } from '../services/productService';
+import { searchProducts } from '../services/productService';
 
 // Product interface
 interface Product {
@@ -81,8 +81,8 @@ const Home: React.FC = () => {
   const [orderBy, setOrderBy] = useState<string>('Name');
   const [orderDirection, setOrderDirection] = useState<string>('ASC');
   const [showFilters, setShowFilters] = useState<boolean>(false);
-
-  const pageSize = 8;
+  // so luong item 
+  const itemProduct = 12;
 
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
@@ -149,10 +149,10 @@ const Home: React.FC = () => {
 
     try {
       // Use the public search API instead of direct axios calls
-      const response = await searchPublicProducts(
+      const response = await searchProducts(
         searchText.trim(), // Search query
         page, // Page number
-        pageSize // Items per page
+        itemProduct // Items per page
       );
 
       console.log('API Response:', response); // Debug response
@@ -161,8 +161,8 @@ const Home: React.FC = () => {
       if (response && response.data) {
         const productData = response.data;
         setProducts(productData as Product[]);
-        const total = response.total || 0;
-        setTotalPages(Math.ceil(total / pageSize) || 1);
+        const totalItems = response.total || 0;
+        setTotalPages(Math.ceil(totalItems / itemProduct) || 1);
       } else {
         setProducts([]);
         setTotalPages(1);
@@ -174,7 +174,7 @@ const Home: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, searchText]);
+  }, [page, itemProduct, searchText]);
 
   // Load products when component mounts or dependencies change
   useEffect(() => {

@@ -1,34 +1,24 @@
 // @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
-  {
-    ignores: ['eslint.config.mjs'],
+export default {
+  root: true,
+  env: {
+    node: true,
+    jest: true,
+    es2021: true,
   },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'commonjs',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
+  extends: [
+    'eslint:recommended', // Quy tắc cơ bản của ESLint
+    'prettier', // Tích hợp Prettier
+  ],
+  plugins: ['prettier'], // Plugin Prettier
+  parserOptions: {
+    ecmaVersion: 12, // Hỗ trợ ES2021
+    sourceType: 'module', // Sử dụng ES Modules
   },
-  {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
-    },
+  rules: {
+    'prettier/prettier': 'error', // Báo lỗi nếu không tuân theo Prettier
+    'no-unused-vars': 'warn', // Cảnh báo nếu có biến không sử dụng
+    'no-console': 'off', // Cho phép sử dụng console.log
   },
-);
+};

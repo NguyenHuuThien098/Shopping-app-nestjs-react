@@ -1,4 +1,4 @@
-Collecting workspace information# Shopping App Project
+# Shopping App Project
 
 This repository contains a full-stack e-commerce application built with React (frontend) and NestJS (backend). The application allows users to browse products, create accounts, add items to their cart, and complete orders.
 
@@ -55,14 +55,14 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 - User authentication and authorization
 - Product management
 - Order processing
-- Database integration with MySQL
+- Database integration with PostgreSQL
 
 ### Key Technologies
 
 - NestJS 11
 - TypeORM for database interaction
 - JWT authentication
-- MySQL database
+- PostgreSQL database
 - Class-validator for DTO validation
 
 ### Getting Started
@@ -80,7 +80,8 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 3. Configure your database settings in `.env` file:
    ```
    DB_HOST=localhost
-   DB_USERNAME=root
+   DB_PORT=5432
+   DB_USERNAME=postgres
    DB_PASSWORD=yourpassword
    DB_DATABASE=shop
    PORT=8080
@@ -95,6 +96,21 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 5. The API will be available at [http://localhost:8080](http://localhost:8080)
 6. API documentation available at [http://localhost:8080/api](http://localhost:8080/api)
 
+## Database Setup
+
+When using PostgreSQL, ensure that sequences are properly configured for auto-increment columns:
+
+```sql
+-- Create sequences for tables with auto-incrementing IDs
+CREATE SEQUENCE IF NOT EXISTS orders_id_seq;
+ALTER TABLE orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
+
+CREATE SEQUENCE IF NOT EXISTS orderdetails_id_seq;
+ALTER TABLE orderdetails ALTER COLUMN id SET DEFAULT nextval('orderdetails_id_seq'::regclass);
+
+-- Repeat for other tables as needed
+```
+
 ## Features
 
 - User registration and authentication
@@ -105,20 +121,12 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 - Order history
 - User profile management
 
-## Project Screenshots
-
-- Home page with product listing
-- Product detail view
-- Shopping cart with item management
-- Checkout flow
-- User dashboard with order history
-
 ## API Endpoints
 
 The backend provides the following main endpoints:
 
 - `/auth` - Authentication routes (login, register)
-- `/products` - Product management
+- `/products` - Product management and search
 - `/orders` - Order processing
 - `/customers` - Customer profile management
 

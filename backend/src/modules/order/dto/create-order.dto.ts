@@ -2,13 +2,13 @@ import { IsNotEmpty, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class OrderDetailDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Product ID is required' })
   productId: number;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Quantity is required' })
   quantity: number;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Price is required' })
   price: number;
 }
 

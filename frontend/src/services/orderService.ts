@@ -29,6 +29,23 @@ export interface OrderResponse {
   }>;
 }
 
+export interface OrderTrackingRequest {
+  orderId: number;
+  status: string;
+  location?: string;
+  notes?: string;
+}
+
+export interface OrderTrackingResponse {
+  id: number;
+  orderId: number;
+  status: string;
+  location: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * Place a new order
  * @param orderData Order data with product details
@@ -46,7 +63,7 @@ export const placeOrder = async (orderData: OrderRequest): Promise<OrderResponse
       });
     }
     
-    const response = await axios.post(API_ENDPOINTS.ORDERS, orderData);
+    const response = await axios.post(API_ENDPOINTS.ORDERS.ROOT, orderData);
     return response.data;
   } catch (error: any) {
     // Extract error message from response if available
@@ -65,7 +82,7 @@ export const placeOrder = async (orderData: OrderRequest): Promise<OrderResponse
  */
 export const getCustomerOrders = async (): Promise<OrderResponse[]> => {
   try {
-    const response = await axios.get(API_ENDPOINTS.CUSTOMER.ORDERS);
+    const response = await axios.get(API_ENDPOINTS.CUSTOMERS.ORDERS);
     return response.data;
   } catch (error: any) {
     if (error.response?.data?.message) {
@@ -82,7 +99,43 @@ export const getCustomerOrders = async (): Promise<OrderResponse[]> => {
  */
 export const getOrderById = async (orderId: number): Promise<OrderResponse> => {
   try {
-    const response = await axios.get(`${API_ENDPOINTS.ORDERS}/${orderId}`);
+    const endpoint = API_ENDPOINTS.ORDERS.DETAILS.replace(':id', orderId.toString());
+    const response = await axios.get(endpoint);
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+/**
+ * Create order tracking entry
+ * @param trackingData Order tracking data
+ * @returns Promise with tracking response
+ */
+export const createOrderTracking = async (trackingData: OrderTrackingRequest): Promise<OrderTrackingResponse> => {
+  try {
+    const response = await axios.post(API_ENDPOINTS.ORDER_TRACKING.CREATE, trackingData);
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+/**
+ * Get tracking history for an order
+ * @param orderId Order ID
+ * @returns Promise with tracking history
+ */
+export const getOrderTrackingHistory = async (orderId: number): Promise<OrderTrackingResponse[]> => {
+  try {
+    const endpoint = API_ENDPOINTS.ORDER_TRACKING.HISTORY.replace(':orderId', orderId.toString());
+    const response = await axios.get(endpoint);
     return response.data;
   } catch (error: any) {
     if (error.response?.data?.message) {

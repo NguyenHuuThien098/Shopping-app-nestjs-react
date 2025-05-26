@@ -14,27 +14,37 @@ export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8
  * Used for consistent API access throughout the application
  */
 export const API_ENDPOINTS = {
+  AUTH: {
+    LOGIN: '/auth/login',
+    LOGOUT: '/auth/logout',
+    PROFILE: '/auth/profile',
+    REFRESH: '/auth/refresh',
+  },
+  ADMIN: {
+    LOGIN: '/admin/login',
+    REGISTER: '/admin/register',
+    DASHBOARD: '/admin/dashboard',
+  },
+  CUSTOMERS: {
+    REGISTER: '/customers/register',
+    PROFILE: '/customers/profile',
+    TOP_SPENDING: '/customers/top-spending',
+    ORDERS: '/customers/orders',
+  },
   PRODUCTS: {
     ROOT: '/products',
     SEARCH: '/products/search',
     DETAILS: '/products/:id',
   },
-  ORDERS: '/orders',
-  CUSTOMERS: '/customers',
-  ORDER_DETAILS: '/order-details',
+  ORDERS: {
+    ROOT: '/orders',
+    DETAILS: '/orders/:id',
+  },
+  ORDER_TRACKING: {
+    CREATE: '/order-tracking',
+    HISTORY: '/order-tracking/:orderId',
+  },
   SHIPPERS: '/shippers',
-  AUTH: {
-    LOGIN: '/auth/login',
-    LOGOUT: '/auth/logout',
-    REGISTER: '/auth/register',
-    PROFILE: '/auth/profile',
-    REFRESH: '/auth/refresh', // refresh token
-  },
-  CUSTOMER: {
-    ORDERS: '/customer/order-product',
-    PROFILE: '/customer/profile',
-    GETORDERS: '/customers/:customerId/orders', // lấy orders theo idcustomer
-  },
 };
 
 /**

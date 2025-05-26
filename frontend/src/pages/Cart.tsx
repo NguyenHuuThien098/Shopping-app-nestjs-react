@@ -104,7 +104,7 @@ const Cart: React.FC = () => {
       
       // Send order to API
       const response = await axios.post(
-        getApiUrl(API_ENDPOINTS.ORDERS),
+        getApiUrl(API_ENDPOINTS.ORDERS.ROOT),
         orderData,
         {
           headers: {

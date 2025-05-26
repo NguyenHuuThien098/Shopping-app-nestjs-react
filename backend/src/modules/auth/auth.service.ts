@@ -1,12 +1,12 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcryptjs'; // Đã thay đổi sang bcryptjs
-import { User, UserRole } from '../../entities/user.entity'; // Đảm bảo import đúng
+import * as bcrypt from 'bcryptjs';
+import { User, UserRole } from '../../entities/user.entity'; 
 import { Customer } from '../../entities/customer.entity';
-import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Admin } from '../../entities/admin.entity';
 
 @Injectable()
 export class AuthService {
@@ -15,55 +15,14 @@ export class AuthService {
     private userRepository: Repository<User>,
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
+    @InjectRepository(Admin)
+    private adminRepository: Repository<Admin>,
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{ user: Partial<User>; access_token: string }> {
-    const { username, email, password, fullName } = registerDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Kiểm tra xem username hoặc email đã tồn tại chưa
-    const existingUser = await this.userRepository.findOne({
-      where: [{ username }, { email }],
-    });
-
-    if (existingUser) {
-      throw new ConflictException('Username or email already exists');
-    }
-
-    // Tạo người dùng mới
-    const user = this.userRepository.create({
-      username,
-      email,
-      password:hashedPassword,
-      fullName,
-      role: UserRole.CUSTOMER,
-      isActive: true,
-    });
-
-    const savedUser = await this.userRepository.save(user);
-
-    // Tạo khách hàng tương ứng trong bảng customers
-    const customer = this.customerRepository.create({
-      Name: fullName,
-      ContactName: username,
-      Country: 'Unknown', // Bạn có thể thay đổi giá trị mặc định này
-      UserId: savedUser.id,
-    });
-
-    await this.customerRepository.save(customer);
-
-    // Tạo JWT token
-    const payload = { sub: savedUser.id, username: savedUser.username, role: savedUser.role };
-    const access_token = this.jwtService.sign(payload);
-
-    // Không trả về password trong response
-    const { password: _, ...userWithoutPassword } = savedUser;
-
-    return {
-      user: userWithoutPassword,
-      access_token,
-    };
-  }
+  // Đã chuyển phương thức register sang CustomerService
+  
+  // Đã chuyển phương thức registerAdmin sang AdminService
 
   async login(loginDto: LoginDto): Promise<{ user: Partial<User>; access_token: string }> {
     // Tìm user theo username
@@ -113,7 +72,7 @@ export class AuthService {
     return { message: 'Logout successful' };
   }
 
-  async findById(id: number): Promise<User | null> { // Đảm bảo User được import
+  async findById(id: number): Promise<User | null> { 
     return this.userRepository.findOne({ where: { id } });
   }
 

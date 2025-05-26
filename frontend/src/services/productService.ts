@@ -65,14 +65,12 @@ export const searchProducts = async (
 };
 
 /**
- * Search products (public, no authentication required)
- * @param query Search query
+ * Get products (public, no authentication required)
  * @param page Page number
  * @param limit Items per page
  * @returns Promise with search results
  */
 export const getProducts = async (
-  query: string,
   page: number = 1,
   limit: number = 10
 ): Promise<SearchResponse> => {
@@ -117,7 +115,8 @@ export const getProductById = async (id: number): Promise<Product> => {
   try {
     console.log(`Lấy chi tiết sản phẩm ID=${id}`);
     
-    const response = await axios.get(API_ENDPOINTS.PRODUCTS.DETAILS.replace(':id', id.toString()));
+    const endpoint = API_ENDPOINTS.PRODUCTS.DETAILS.replace(':id', id.toString());
+    const response = await axios.get(endpoint);
     console.log('Chi tiết sản phẩm:', response.data);
     
     // Chuẩn hóa phản hồi để hỗ trợ cả hai kiểu đặt tên

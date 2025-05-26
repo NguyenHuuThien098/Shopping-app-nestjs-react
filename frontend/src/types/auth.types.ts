@@ -1,5 +1,5 @@
 /**
- * Loại dữ liệu cho thông tin người dùng
+ * Type definitions for authentication
  */
 // User interface representing the authenticated user
 export interface User {
@@ -13,8 +13,22 @@ export interface User {
   updatedAt: string;
 }
 
+// Extended user profile for customers
+export interface CustomerProfile extends User {
+  address?: string;
+  phone?: string;
+  // Any additional customer-specific fields
+}
+
+// Extended user profile for admins
+export interface AdminProfile extends User {
+  permissions?: string[];
+  department?: string;
+  // Any additional admin-specific fields
+}
+
 /**
- * Thông tin đăng nhập
+ * Login credentials
  */
 // Login credentials interface
 export interface LoginCredentials {
@@ -23,9 +37,9 @@ export interface LoginCredentials {
 }
 
 /**
- * Thông tin đăng ký
+ * Registration credentials
  */
-// Registration credentials interface
+// Base registration credentials
 export interface RegisterCredentials {
   username: string;
   email: string;
@@ -33,8 +47,20 @@ export interface RegisterCredentials {
   fullName: string;
 }
 
+// Customer-specific registration
+export interface CustomerRegisterCredentials extends RegisterCredentials {
+  address?: string;
+  phone?: string;
+}
+
+// Admin-specific registration
+export interface AdminRegisterCredentials extends RegisterCredentials {
+  department?: string;
+  permissions?: string[];
+}
+
 /**
- * Phản hồi xác thực từ API
+ * Authentication API responses
  */
 export interface AuthResponse {
   success: boolean;
@@ -50,18 +76,19 @@ export interface AuthResponse {
 }
 
 /**
- * Phản hồi lấy thông tin profile từ API
+ * Profile response from API
  */
 export interface ProfileResponse {
   success: boolean;
   data?: {
     user: User;
     customerProfile?: any;
+    adminProfile?: any;
   };
 }
 
 /**
- * Trạng thái xác thực trong Context
+ * Authentication state in Context
  */
 // Authentication state interface
 export interface AuthState {

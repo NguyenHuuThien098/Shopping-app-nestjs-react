@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Container, 
   Typography, 
@@ -17,8 +17,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
-import { API_ENDPOINTS, API_BASE_URL } from '../../utils/apiConfig';
+// import axios from 'axios';
+// import { API_ENDPOINTS, API_BASE_URL } from '../../utils/apiConfig';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import PersonIcon from '@mui/icons-material/Person';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -43,48 +43,48 @@ interface Order {
  * Displays user information and recent orders
  */
 const Dashboard: React.FC = () => {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [orders] = useState<Order[]>([]);
+  const [loading] = useState(true);
+  const [error] = useState<string | null>(null);
   
   // Fetch user orders
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        if (!token || !user?.id) {
-          setLoading(false);
-          return;
-        }
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     try {
+  //       if (!token || !user?.id) {
+  //         setLoading(false);
+  //         return;
+  //       }
         
-        console.log("Fetching orders with token:", token?.substring(0, 15) + "...");
+  //       console.log("Fetching orders with token:", token?.substring(0, 15) + "...");
         
-        // Replace the customerId parameter in the endpoint
-        const ordersEndpoint = API_ENDPOINTS.CUSTOMER.GETORDERS.replace(':customerId', user.id.toString());
+  //       // Replace the customerId parameter in the endpoint
+  //       const ordersEndpoint = API_ENDPOINTS.CUSTOMER.GETORDERS.replace(':customerId', user.id.toString());
         
-        const response = await axios.get(
-          `${API_BASE_URL}${ordersEndpoint}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+  //       const response = await axios.get(
+  //         `${API_BASE_URL}${ordersEndpoint}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         }
+  //       );
         
-        console.log("Orders response:", response.data);
-        setOrders(Array.isArray(response.data.data) ? response.data.data : []);
-      } catch (err: any) {
-        console.error('Error fetching orders:', err);
-        setError('Failed to load your orders. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       console.log("Orders response:", response.data);
+  //       setOrders(Array.isArray(response.data.data) ? response.data.data : []);
+  //     } catch (err: any) {
+  //       console.error('Error fetching orders:', err);
+  //       setError('Failed to load your orders. Please try again later.');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
     
-    fetchOrders();
-  }, [token, user?.id]);
+  //   fetchOrders();
+  // }, [token, user?.id]);
 
   // Format date for display
   const formatDate = (dateString: string) => {

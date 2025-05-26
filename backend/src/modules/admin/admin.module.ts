@@ -2,17 +2,15 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CustomerController } from './customer.controller';
-import { CustomerService } from './custumer.service';
-import { Customer } from '../../entities/customer.entity';
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
+import { Admin } from '../../entities/admin.entity';
 import { User } from '../../entities/user.entity';
-import { Order } from '../../entities/order.entity';
-import { OrderDetail } from '../../entities/order-detail.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Customer, User, Order, OrderDetail]),
+    TypeOrmModule.forFeature([Admin, User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,7 +21,7 @@ import { AuthModule } from '../auth/auth.module';
     }),
     AuthModule,
   ],
-  controllers: [CustomerController],
-  providers: [CustomerService],
+  controllers: [AdminController],
+  providers: [AdminService],
 })
-export class CustomerModule {}
+export class AdminModule {}

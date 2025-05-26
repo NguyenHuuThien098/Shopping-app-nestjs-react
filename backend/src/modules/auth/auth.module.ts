@@ -7,7 +7,9 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from '../../entities/user.entity';
 import { Customer } from '../../entities/customer.entity';
+import { Admin } from '../../entities/admin.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { RolesGuard } from './guards/role.guard';
 
 @Module({
   imports: [
@@ -20,10 +22,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    TypeOrmModule.forFeature([User, Customer]), // Thêm Customer vào đây
+    TypeOrmModule.forFeature([User, Customer, Admin]), // Thêm Admin vào đây
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, RolesGuard],
+  exports: [AuthService, JwtStrategy, RolesGuard],
 })
 export class AuthModule {}

@@ -1,24 +1,26 @@
 # Shopping App Project
 
-This repository contains a full-stack e-commerce application built with React (frontend) and NestJS (backend). The application allows users to browse products, create accounts, add items to their cart, and complete orders.
+This repository contains a full-stack e-commerce application built with React (frontend) and NestJS (backend). The application supports role-based authentication (admin & customer), product browsing, order management, and more.
 
 ## Project Structure
 
-The project is organized into two main directories:
+```
+├── frontend/     # React application (Material-UI, React Router, Context API)
+└── backend/      # NestJS REST API (TypeORM, PostgreSQL, JWT)
+```
 
-```
-├── frontend/     # React application
-└── backend/      # NestJS REST API
-```
+---
 
 ## Frontend
 
 The frontend is built with React and Material-UI, featuring:
 
-- User authentication (login/register)
+- Role-based authentication (admin & customer)
+- Customer registration and profile management
+- Admin registration (by admin) and dashboard
 - Product browsing with search and filtering
 - Shopping cart functionality
-- Order management
+- Order management and order tracking
 - Responsive design for mobile and desktop
 
 ### Key Technologies
@@ -28,6 +30,7 @@ The frontend is built with React and Material-UI, featuring:
 - Axios for API requests
 - React Router for navigation
 - Context API for state management
+- TypeScript
 
 ### Getting Started
 
@@ -48,13 +51,21 @@ The frontend is built with React and Material-UI, featuring:
 
 4. The application will be available at [http://localhost:3000](http://localhost:3000)
 
+#### Environment Variables
+
+- Configure `REACT_APP_API_URL` in `.env` (default: `http://localhost:8080`)
+
+---
+
 ## Backend
 
 The backend is built with NestJS and provides a RESTful API for the frontend with:
 
-- User authentication and authorization
+- Role-based authentication and authorization (admin & customer)
+- Admin management (register/login/dashboard)
+- Customer management (register/profile/orders)
 - Product management
-- Order processing
+- Order processing & order tracking
 - Database integration with PostgreSQL
 
 ### Key Technologies
@@ -64,6 +75,7 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 - JWT authentication
 - PostgreSQL database
 - Class-validator for DTO validation
+- Swagger for API docs
 
 ### Getting Started
 
@@ -96,6 +108,8 @@ The backend is built with NestJS and provides a RESTful API for the frontend wit
 5. The API will be available at [http://localhost:8080](http://localhost:8080)
 6. API documentation available at [http://localhost:8080/api](http://localhost:8080/api)
 
+---
+
 ## Database Setup
 
 When using PostgreSQL, ensure that sequences are properly configured for auto-increment columns:
@@ -111,24 +125,34 @@ ALTER TABLE orderdetails ALTER COLUMN id SET DEFAULT nextval('orderdetails_id_se
 -- Repeat for other tables as needed
 ```
 
+---
+
 ## Features
 
-- User registration and authentication
-- Browse products with search and filtering capabilities
+- Role-based authentication (admin & customer)
+- Admin registration (by admin) and dashboard
+- Customer registration and profile management
+- Browse products with search and filtering
 - View product details
 - Add products to cart
 - Checkout process
-- Order history
+- Order history and tracking
 - User profile management
+
+---
 
 ## API Endpoints
 
 The backend provides the following main endpoints:
 
-- `/auth` - Authentication routes (login, register)
+- `/auth` - Authentication routes (login, logout, profile)
+- `/admin` - Admin routes (login, register, dashboard)
+- `/customers` - Customer registration, profile, and order history
 - `/products` - Product management and search
 - `/orders` - Order processing
-- `/customers` - Customer profile management
+- `/order-tracking` - Order tracking management
+
+---
 
 ## License
 
